@@ -1,85 +1,74 @@
 /* ============================================================
-   Design tokens — tienda online premium (teal + coral).
-   Tema claro, editorial, aireado.
+   Design tokens — estilo Temu (naranja + rojo oferta, fondo blanco).
    ============================================================ */
 :root {
-  /* superficies */
-  --bg: #faf8f4;            /* off-white cálido (papel) */
+  /* estructura / neutros */
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f4f1ea;
-  --border: #e9e3d8;
-  --border-strong: #ddd5c6;
+  --surface-2: #f5f5f5;   /* cajas, buscador, separadores */
+  --border: #e0e0e0;
 
   /* texto */
-  --ink: #1c2b29;           /* charcoal-teal */
-  --ink-soft: #46514f;
-  --muted: #7c8785;
+  --ink: #222222;         /* títulos y texto principal */
+  --muted: #666666;       /* secundario, tachados, conteos */
 
-  /* marca */
-  --brand: #0e6e62;         /* teal profundo */
-  --brand-600: #0b5c52;
-  --brand-700: #084a42;
-  --brand-050: #e6f1ef;
+  /* marca / CTA */
+  --primary: #ff6600;     /* naranja Temu */
+  --primary-600: #e55c00; /* hover */
+  --primary-050: #fff3eb; /* fondo envío gratis / badges naranja */
 
-  /* acento / CTA */
-  --accent: #e8552b;        /* coral cálido */
-  --accent-600: #cf4620;
-  --accent-050: #fdeee9;
+  /* oferta / urgencia */
+  --sale: #e60012;        /* precios y alertas */
+  --sale-700: #d32f2f;
+  --sale-050: #ffeaeb;    /* fondo badge descuento */
 
-  /* semánticos */
-  --price: #0e6e62;
-  --success: #1f9d57;
-  --danger: #c0392b;
+  /* indicadores */
+  --success: #008a00;     /* envío gratis, garantías */
+  --star: #ffc107;        /* estrellas */
 
-  /* radios y sombras */
-  --r-sm: 8px;
   --r: 12px;
-  --r-lg: 18px;
-  --r-pill: 999px;
-  --shadow-sm: 0 1px 2px rgba(24, 40, 38, .06), 0 1px 3px rgba(24, 40, 38, .05);
-  --shadow: 0 6px 18px rgba(24, 40, 38, .08), 0 2px 6px rgba(24, 40, 38, .05);
-  --shadow-lg: 0 18px 40px rgba(24, 40, 38, .14);
+  --r-sm: 8px;
+  --r-pill: 22px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
+  --shadow: 0 2px 10px rgba(0, 0, 0, .07);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, .10);
 
-  /* tipografía */
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --font-ui: 'Manrope', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-
-  --maxw: 1120px;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --maxw: 1200px;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background:
-    radial-gradient(1200px 600px at 100% -10%, rgba(14, 110, 98, .06), transparent 60%),
-    radial-gradient(900px 500px at -10% 110%, rgba(232, 85, 43, .05), transparent 55%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
-main { min-height: calc(100vh - 68px); }
-a { color: var(--brand); text-decoration: none; }
-a:hover { color: var(--brand-700); }
-
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+main { min-height: calc(100vh - 64px); background: var(--surface-2); }
+h1, h2, h3 { color: var(--ink); font-weight: 700; letter-spacing: -.01em; }
+a { color: var(--ink); text-decoration: none; }
 
 button { font-family: var(--font-ui); cursor: pointer; }
 
-/* utilidades de botón reutilizables */
+/* ---- Botones (pill) ---- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  border: none; border-radius: var(--r-pill); padding: .62rem 1.1rem;
-  font-weight: 600; font-size: .92rem; transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
+  border: none; border-radius: var(--r-pill); padding: .6rem 1.15rem;
+  font-weight: 700; font-size: .92rem; transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
-.btn:active { transform: translateY(1px); }
-.btn-accent { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(232, 85, 43, .28); }
-.btn-accent:hover { background: var(--accent-600); }
-.btn-brand { background: var(--brand); color: #fff; }
-.btn-brand:hover { background: var(--brand-600); color: #fff; }
-.btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--border-strong); }
-.btn-ghost:hover { background: var(--surface-2); }
+.btn:active { transform: scale(.98); }
+/* Primario: naranja Temu */
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(255, 102, 0, .28); }
+.btn-primary:hover { background: var(--primary-600); }
+/* Secundario: blanco con borde */
+.btn-secondary { background: #fff; color: var(--ink); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--ink); }
 
-@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+/* ---- Badges ---- */
+.badge-free { background: var(--primary-050); color: var(--success); font-weight: 700; font-size: .72rem;
+  padding: .2rem .5rem; border-radius: var(--r-sm); display: inline-flex; align-items: center; gap: .25rem; }
+.badge-hot { background: var(--sale-050); color: var(--sale); font-weight: 700; font-size: .72rem;
+  padding: .2rem .5rem; border-radius: var(--r-sm); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
