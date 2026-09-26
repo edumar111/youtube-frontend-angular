@@ -23,9 +23,18 @@ const DEMO_CUSTOMER_ID = 1;
         <div class="panel">
           <h2>Resumen del pedido</h2>
           @for (item of cart.items(); track item.product.id) {
-            <div class="row">
-              <span>{{ item.quantity }} × {{ item.product.name }}</span>
-              <span class="mono">{{ item.product.price * item.quantity | currency:'USD' }}</span>
+            <div class="item">
+              <div class="thumb">
+                @if (item.product.imageUrl) {
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name"
+                       (error)="$any($event.target).style.display='none'" />
+                } @else { {{ ini(item.product.name) }} }
+              </div>
+              <div class="info">
+                <span class="name">{{ item.product.name }}</span>
+                <span class="q">Cantidad: {{ item.quantity }}</span>
+              </div>
+              <span class="sub">{{ item.product.price * item.quantity | currency:'USD' }}</span>
             </div>
           }
           <div class="row ship"><span>Envío</span><span class="free">GRATIS</span></div>
@@ -58,8 +67,19 @@ const DEMO_CUSTOMER_ID = 1;
     h1 { font-size: 1.7rem; margin: 0 0 1.2rem; }
     h2 { font-size: 1.05rem; margin: 0 0 .9rem; }
     .panel { background: #fff; border: 1px solid var(--border); border-radius: var(--r); box-shadow: var(--shadow); padding: 1.3rem; }
+    .item { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: .8rem;
+            padding: .7rem 0; border-bottom: 1px solid var(--border); }
+    .item .thumb { width: 48px; height: 48px; border-radius: var(--r-sm); background: var(--surface-2);
+                   color: var(--primary); display: grid; place-items: center; font-weight: 800; overflow: hidden; }
+    .item .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .item .info { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+    .item .name { font-size: .9rem; font-weight: 600; color: var(--ink); line-height: 1.3;
+                  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .item .q { font-size: .8rem; color: var(--muted); }
+    .item .sub { font-weight: 800; color: var(--sale); white-space: nowrap; }
     .row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); color: var(--ink); }
     .row .mono { font-variant-numeric: tabular-nums; color: var(--muted); }
+    .row.ship { padding-top: .8rem; }
     .row.ship .free { color: var(--success); font-weight: 800; }
     .row.total { border-bottom: none; margin-top: .3rem; padding-top: .8rem; font-weight: 800; }
     .grand { color: var(--sale); font-size: 1.5rem; font-weight: 800; }
@@ -109,6 +129,10 @@ export class Checkout {
       },
       error: (e) => { this.error.set(e?.message ?? 'error'); this.submitting.set(false); },
     });
+  }
+
+  ini(name: string): string {
+    return name.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   }
 
   private poll(id: number, attempt: number): void {
