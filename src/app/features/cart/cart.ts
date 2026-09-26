@@ -19,7 +19,12 @@ import { CartService } from '../../core/cart.service';
         <div class="panel">
           @for (item of cart.items(); track item.product.id) {
             <div class="line">
-              <div class="glyph">{{ ini(item.product.name) }}</div>
+              <div class="glyph">
+                @if (item.product.imageUrl) {
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name"
+                       (error)="$any($event.target).style.display='none'" />
+                } @else { {{ ini(item.product.name) }} }
+              </div>
               <div class="info">
                 <strong>{{ item.product.name }}</strong>
                 <span class="badge-free">✓ Envío gratis</span>
@@ -57,7 +62,8 @@ import { CartService } from '../../core/cart.service';
             padding: .9rem 1rem; border-bottom: 1px solid var(--border); }
     .line:last-child { border-bottom: none; }
     .glyph { width: 48px; height: 48px; border-radius: var(--r-sm); background: var(--surface-2); color: var(--primary);
-             display: grid; place-items: center; font-weight: 800; }
+             display: grid; place-items: center; font-weight: 800; overflow: hidden; }
+    .glyph img { width: 100%; height: 100%; object-fit: cover; }
     .info { display: flex; flex-direction: column; gap: .3rem; }
     .info strong { font-size: .95rem; font-weight: 600; }
     .badge-free { align-self: flex-start; }

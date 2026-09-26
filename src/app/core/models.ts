@@ -13,6 +13,7 @@ export interface Product {
   price: number;
   status: string;
   createdAt?: string;
+  imageUrl?: string;
   category?: Category;
 }
 

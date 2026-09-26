@@ -42,6 +42,10 @@ import { CategorySidebar } from './category-sidebar';
                 <article class="card" [style.animation-delay.ms]="i * 35">
                   <div class="thumb">
                     <span class="glyph" [style.color]="tint(p)">{{ initials(p.name) }}</span>
+                    @if (p.imageUrl) {
+                      <img class="photo" [src]="p.imageUrl" [alt]="p.name" loading="lazy"
+                           (error)="$any($event.target).style.display='none'" />
+                    }
                     @if (p.stock <= 3) { <span class="hot badge-hot">¡Casi agotado!</span> }
                   </div>
                   <div class="body">
@@ -86,9 +90,10 @@ import { CategorySidebar } from './category-sidebar';
       box-shadow: var(--shadow-sm); display: flex; flex-direction: column; animation: rise .4s ease both;
       transition: box-shadow .16s ease, transform .16s ease; }
     .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-    .thumb { position: relative; aspect-ratio: 1 / 1; background: var(--surface-2); display: grid; place-items: center; }
+    .thumb { position: relative; aspect-ratio: 1 / 1; background: var(--surface-2); display: grid; place-items: center; overflow: hidden; }
     .glyph { font-size: 2.4rem; font-weight: 800; opacity: .9; }
-    .hot { position: absolute; top: 8px; left: 8px; }
+    .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #fff; }
+    .hot { position: absolute; top: 8px; left: 8px; z-index: 2; }
     .body { padding: .7rem .8rem .85rem; display: flex; flex-direction: column; gap: .4rem; flex: 1; }
     .body h3 { margin: 0; font-size: .9rem; font-weight: 600; line-height: 1.3;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.35em; }
