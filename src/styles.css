@@ -1,10 +1,85 @@
-:root { color-scheme: dark; }
+/* ============================================================
+   Design tokens — tienda online premium (teal + coral).
+   Tema claro, editorial, aireado.
+   ============================================================ */
+:root {
+  /* superficies */
+  --bg: #faf8f4;            /* off-white cálido (papel) */
+  --surface: #ffffff;
+  --surface-2: #f4f1ea;
+  --border: #e9e3d8;
+  --border-strong: #ddd5c6;
+
+  /* texto */
+  --ink: #1c2b29;           /* charcoal-teal */
+  --ink-soft: #46514f;
+  --muted: #7c8785;
+
+  /* marca */
+  --brand: #0e6e62;         /* teal profundo */
+  --brand-600: #0b5c52;
+  --brand-700: #084a42;
+  --brand-050: #e6f1ef;
+
+  /* acento / CTA */
+  --accent: #e8552b;        /* coral cálido */
+  --accent-600: #cf4620;
+  --accent-050: #fdeee9;
+
+  /* semánticos */
+  --price: #0e6e62;
+  --success: #1f9d57;
+  --danger: #c0392b;
+
+  /* radios y sombras */
+  --r-sm: 8px;
+  --r: 12px;
+  --r-lg: 18px;
+  --r-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(24, 40, 38, .06), 0 1px 3px rgba(24, 40, 38, .05);
+  --shadow: 0 6px 18px rgba(24, 40, 38, .08), 0 2px 6px rgba(24, 40, 38, .05);
+  --shadow-lg: 0 18px 40px rgba(24, 40, 38, .14);
+
+  /* tipografía */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Manrope', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  --maxw: 1120px;
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background: #0e0f16;
-  color: #e8e8ec;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(14, 110, 98, .06), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(232, 85, 43, .05), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-main { min-height: calc(100vh - 60px); }
-a { color: #00e5ff; }
+main { min-height: calc(100vh - 68px); }
+a { color: var(--brand); text-decoration: none; }
+a:hover { color: var(--brand-700); }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+
+button { font-family: var(--font-ui); cursor: pointer; }
+
+/* utilidades de botón reutilizables */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  border: none; border-radius: var(--r-pill); padding: .62rem 1.1rem;
+  font-weight: 600; font-size: .92rem; transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-accent { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(232, 85, 43, .28); }
+.btn-accent:hover { background: var(--accent-600); }
+.btn-brand { background: var(--brand); color: #fff; }
+.btn-brand:hover { background: var(--brand-600); color: #fff; }
+.btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--border-strong); }
+.btn-ghost:hover { background: var(--surface-2); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }

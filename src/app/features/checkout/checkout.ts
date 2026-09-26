@@ -14,37 +14,75 @@ const DEMO_CUSTOMER_ID = 1;
   template: `
     <section class="wrap">
       <h1>Checkout</h1>
+
       @if (cart.items().length === 0 && !invoiceId()) {
-        <p class="muted">No hay nada que pagar. <a routerLink="/catalog">Ver catálogo</a>.</p>
+        <div class="empty">
+          <p>No hay nada que pagar.</p>
+          <a class="btn btn-brand" routerLink="/catalog">Ver catálogo</a>
+        </div>
       } @else if (!invoiceId()) {
-        <p>Vas a comprar {{ cart.count() }} artículo(s) por
-           <strong>{{ cart.total() | currency:'USD' }}</strong>.</p>
-        <button class="pay" [disabled]="submitting()" (click)="pay()">
-          {{ submitting() ? 'Procesando…' : 'Confirmar compra' }}
-        </button>
+        <div class="panel">
+          <h2>Resumen del pedido</h2>
+          @for (item of cart.items(); track item.product.id) {
+            <div class="row">
+              <span>{{ item.quantity }} × {{ item.product.name }}</span>
+              <span class="mono">{{ item.product.price * item.quantity | currency:'USD' }}</span>
+            </div>
+          }
+          <div class="row total">
+            <span>Total</span><span class="grand">{{ cart.total() | currency:'USD' }}</span>
+          </div>
+          <button class="btn btn-accent lg" [disabled]="submitting()" (click)="pay()">
+            {{ submitting() ? 'Procesando…' : 'Confirmar compra' }}
+          </button>
+        </div>
       } @else {
-        <div class="result">
-          <p>Factura <strong>#{{ invoiceId() }}</strong> creada.</p>
-          <p>Estado de la saga:
-            <span class="state" [class.ok]="state()==='CONFIRMED'"
-                  [class.bad]="state()==='CANCELLED'">{{ state() }}</span>
-          </p>
-          @if (state()==='PENDING') { <p class="muted">Esperando el descuento de stock (Outbox → Kafka → product-service)…</p> }
+        <div class="panel result">
+          <p class="fnum">Factura #{{ invoiceId() }}</p>
+          <div class="statebox">
+            <span class="label">Estado de la saga</span>
+            <span class="badge"
+                  [class.pending]="state()==='PENDING'"
+                  [class.ok]="state()==='CONFIRMED'"
+                  [class.bad]="state()==='CANCELLED'">
+              @if (state()==='PENDING') { <span class="spin"></span> }
+              {{ state() }}
+            </span>
+          </div>
+          @if (state()==='PENDING') { <p class="muted">Descontando stock (Outbox → Kafka → product-service)…</p> }
           @if (state()==='CONFIRMED') { <p class="ok">¡Compra confirmada! El stock se descontó correctamente.</p> }
-          @if (state()==='CANCELLED') { <p class="bad">La compra se canceló (compensación de la saga: stock insuficiente u otro fallo).</p> }
-          <a class="btn" routerLink="/catalog">Seguir comprando</a>
+          @if (state()==='CANCELLED') { <p class="bad">Compra cancelada (compensación de la saga: stock insuficiente u otro fallo).</p> }
+          <a class="btn btn-brand" routerLink="/catalog">Seguir comprando</a>
         </div>
       }
       @if (error()) { <p class="bad">Error: {{ error() }}</p> }
     </section>
   `,
   styles: [`
-    .wrap { max-width: 620px; margin: 0 auto; padding: 1.5rem 1.25rem; color: #e8e8ec; }
-    .pay, .btn { background: #ff7a1a; color: #10111a; border: none; padding: .6rem 1.1rem; border-radius: 6px; cursor: pointer; font-weight: 700; text-decoration: none; display: inline-block; }
-    .pay[disabled] { opacity: .6; cursor: default; }
-    .state { font-weight: 700; color: #00e5ff; } .state.ok { color: #39ff88; } .state.bad { color: #ff3b5c; }
-    .ok { color: #39ff88; } .bad { color: #ff3b5c; } .muted { color: #7d8093; } a { color: #00e5ff; }
-    .result { background: #171826; border: 1px solid #262838; border-radius: 10px; padding: 1rem; }
+    .wrap { max-width: 560px; margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
+    h1 { font-size: 2rem; margin: 0 0 1.4rem; }
+    h2 { font-size: 1.15rem; margin: 0 0 1rem; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 1.5rem; }
+    .row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px dashed var(--border); color: var(--ink-soft); }
+    .row.total { border-bottom: none; border-top: 2px solid var(--border-strong); margin-top: .4rem; padding-top: .9rem; color: var(--ink); font-weight: 700; }
+    .mono { font-variant-numeric: tabular-nums; }
+    .grand { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--brand); }
+    .btn.lg { width: 100%; margin-top: 1.3rem; padding: .85rem; font-size: 1rem; }
+    .empty { text-align: center; color: var(--muted); display: grid; gap: 1.1rem; justify-items: center; padding: 3rem 0; }
+
+    .result { text-align: center; }
+    .fnum { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink); margin: 0 0 1rem; }
+    .statebox { display: flex; flex-direction: column; align-items: center; gap: .5rem; margin: .5rem 0 1rem; }
+    .label { text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; color: var(--muted); font-weight: 700; }
+    .badge { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1.05rem;
+             padding: .5rem 1.1rem; border-radius: var(--r-pill); }
+    .badge.pending { background: #fff5e6; color: #a9611a; }
+    .badge.ok { background: #e6f6ed; color: #157a43; }
+    .badge.bad { background: #fdeceb; color: var(--danger); }
+    .spin { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: sp .7s linear infinite; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    .muted { color: var(--muted); } .ok { color: var(--success); } .bad { color: var(--danger); }
+    .result .btn { margin-top: .8rem; }
   `],
 })
 export class Checkout {
@@ -88,10 +126,7 @@ export class Checkout {
     }
     setTimeout(() => {
       this.invoiceService.get(id).subscribe({
-        next: (inv) => {
-          this.state.set(inv.state);
-          this.poll(id, attempt + 1);
-        },
+        next: (inv) => { this.state.set(inv.state); this.poll(id, attempt + 1); },
         error: () => this.poll(id, attempt + 1),
       });
     }, 1500);
