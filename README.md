@@ -27,6 +27,16 @@ En `src/app/core/config.ts`:
 
 El backend ya trae los ajustes necesarios (cliente `store-spa` con PKCE y **CORS** en Kong y en el Auth Server).
 
+### Credenciales de demo (login)
+
+En la pantalla de login del Authorization Server usa el usuario sembrado por el backend:
+
+| Usuario | Contraseña |
+|---|---|
+| `user` | `password` |
+
+> Son credenciales de **demostración** (usuario en memoria del Authorization Server), solo para desarrollo del curso.
+
 ## Desarrollo
 
 ```bash
